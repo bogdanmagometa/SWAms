@@ -16,6 +16,8 @@ dependencies {
     implementation 'com.google.guava:guava:31.1-jre'
     // https://mvnrepository.com/artifact/org.json/json
     implementation group: 'org.json', name: 'json', version: '20090211'
+    // https://mvnrepository.com/artifact/com.networknt/json-schema-validator
+    implementation 'com.networknt:json-schema-validator:1.0.77'
 }
 
 application {

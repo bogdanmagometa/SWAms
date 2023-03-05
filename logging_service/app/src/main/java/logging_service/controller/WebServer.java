@@ -7,12 +7,13 @@ import java.net.InetSocketAddress;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadPoolExecutor;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeType;
 import com.sun.net.httpserver.*;
 import org.json.*;
 
@@ -53,7 +54,6 @@ public class WebServer {
 
     //TODO: look into static nested classes
     private class RootHttpHandler implements HttpHandler {
-        final private static int UUID_SIZE_BYTES = 16;
 
         @Override
         public void handle(HttpExchange exchange) {
@@ -81,21 +81,30 @@ public class WebServer {
             responseBody.close();
         }
 
+        private boolean checkValidJson(JsonNode jsonNode) {
+            if (!jsonNode.isObject() || !jsonNode.has("text") || !jsonNode.has("uuid")) {
+                return false;
+            }
+            JsonNodeType textType = jsonNode.get("text").getNodeType();
+            JsonNodeType uuidType = jsonNode.get("uuid").getNodeType();
+            return textType == JsonNodeType.STRING && uuidType == JsonNodeType.STRING;
+        }
+
         private void handlePost(HttpExchange exchange) throws IOException {
             InputStream requestBodyStream = exchange.getRequestBody();
             
-            // byte[] requestBytes = requestBodyStream.readAllBytes();
+            byte[] requestBytes = requestBodyStream.readAllBytes();
             
-            byte[] uuidBytes = requestBodyStream.readNBytes(UUID_SIZE_BYTES);
-            if (uuidBytes.length != UUID_SIZE_BYTES) {
+            JsonNode jsonNode = new ObjectMapper().readTree(new String(requestBytes));
+            
+            if (!checkValidJson(jsonNode)) {
                 logError("Received bad POST request body for / uri.");
                 exchange.sendResponseHeaders(400, -1);
                 return;
             }
-            UUID uuid = UUID.nameUUIDFromBytes(uuidBytes);
+            UUID uuid = UUID.fromString(jsonNode.get("uuid").asText());
 
-            byte[] messageBytes = requestBodyStream.readAllBytes();
-            String message = new String(messageBytes);
+            String message = jsonNode.get("text").asText();
 
             logInfo("Received message \"" + message + "\" with UUID " + uuid.toString());
             loggingService.addMessage(new Message(uuid, message));
