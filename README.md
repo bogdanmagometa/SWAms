@@ -30,10 +30,10 @@ Output after first GET request:
 <img src="./img/get_img.png" />
 
 Output after second POST request:
-<img src="./img/post_img.png" />
+<img src="./img/post_img2.png" />
 
 Output after second GET request:
-<img src="./img/get_img.png" />
+<img src="./img/get_img2.png" />
 
 ### Notes
 
