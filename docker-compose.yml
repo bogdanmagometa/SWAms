@@ -1,0 +1,11 @@
+version: "3.9"
+services:
+  facade:
+    build: ./facade_service
+    ports:
+      - "8080:8080"
+  logging:
+    build: ./logging_service
+  messages:
+    build: ./messages_service
+

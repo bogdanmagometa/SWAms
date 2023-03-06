@@ -21,15 +21,16 @@ import logging_service.domain.Message;
 import logging_service.service.LoggingService;
 
 public class WebServer {
-    final private int PORT = 8001;
+    // final private int PORT = 8001;
     final private int BACKLOG = 10;
-    final private int N_THREADS = 10;
+    final private int N_THREADS = 1;
     final private SimpleDateFormat TIMESTAMP_FORMAT = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
     private LoggingService loggingService = new LoggingService();
 
     public void startServer() throws IOException {
-        HttpServer server = HttpServer.create(new InetSocketAddress("localhost", PORT), BACKLOG);
+        int port = Integer.parseInt(System.getenv("PORT"));
+        HttpServer server = HttpServer.create(new InetSocketAddress("0.0.0.0", port), BACKLOG);
 
         ThreadPoolExecutor threadPoolExecutor = (ThreadPoolExecutor) Executors.newFixedThreadPool(N_THREADS);
 

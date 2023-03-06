@@ -6,8 +6,8 @@ WORKDIR ${PRJ_DIR}
 
 RUN pip install -r requirements.txt
 
-ENV PORT=8083
+# ENV PORT=8082
 
-EXPOSE ${PORT}
+# EXPOSE ${PORT}
 
-CMD uvicorn messages:app --host 0.0.0.0 --port ${PORT}
+CMD uvicorn messages:app --host 0.0.0.0 --port 8082

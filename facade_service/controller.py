@@ -2,10 +2,12 @@ from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import PlainTextResponse, JSONResponse
 from service.service import FacadeService
 from typing import List, Any
+import uvicorn
+import os
 
 app = FastAPI()
-logging_uri = 'http://localhost:8001/'
-messages_uri = 'http://localhost:8083/'
+logging_uri = f'http://{os.getenv("HOSTNAME_LOGGING")}:{os.getenv("PORT_LOGGING")}/'
+messages_uri = f'http://{os.getenv("HOSTNAME_MESSAGES")}:{os.getenv("PORT_MESSAGES")}/'
 
 facade_service = FacadeService(logging_uri, messages_uri)
 
@@ -25,3 +27,11 @@ async def add_message(message_text: str) -> Any:
     if facade_service.log_message(message_text):
         return HTTPException(status.HTTP_200_OK)
     return HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+if __name__ == "__main__":
+    port = os.getenv("PORT")
+    if port is None:
+        print("Error: port is not specified")
+    else:
+        port = int(port)
+        uvicorn.run(app, host="0.0.0.0", port=port)
