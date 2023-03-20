@@ -1,2 +1,3 @@
-# SWAms
-Software Architecture labs on microservices
+# SWAms: Lab 2 (Hazelcast)
+
+
