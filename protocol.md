@@ -1,5 +1,7 @@
 # Protocol: lab2
 
+Author: Bohdan Mahometa <br>
+Github branch: <a href="https://github.com/bogdanmagometa/SWAms/tree/hazelcast">https://github.com/bogdanmagometa/SWAms/tree/hazelcast</a>
 
 ## 2. Configure 3 instances
 
@@ -36,12 +38,13 @@ After removing two nodes, the entries were not lost:
 
 In the first case, we have race condition and loss of data, so we do not get 3000.
 
-In case of pessimistic and optimistic locks, there are no race conditions. Optimistic lock seems to be a little bit faster, but we haven't probed it statistically.
+In case of pessimistic and optimistic locks, there are no race conditions. Optimistic lock seems to be a little bit faster, but we haven't proved it statistically.
 
 
 ## 5. Configure Bounded Queue
 
 - When there are no reads (0 consumers), the put operation blocks:
+
 ![](./img/part5/hang.png)
 
 - When there is at least one consumer, the bounded queue might block the provider until reads occur:
