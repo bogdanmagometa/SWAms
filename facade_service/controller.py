@@ -7,9 +7,9 @@ import os
 
 app = FastAPI()
 logging_hostname = os.getenv("HOSTNAME_LOGGING")
-num_logging_services = os.getenv("NUM_LOGGING_SERVICES")
+num_logging_services = int(os.getenv("NUM_LOGGING_SERVICES"))
 logging_port = os.getenv("PORT_LOGGING")
-logging_uris = [f'http://{logging_hostname}{i+1}:{logging_port}/' for i in range(num_logging_services)]
+logging_uris = [f'http://swa-{logging_hostname}-{i+1}:{logging_port}/' for i in range(num_logging_services)] # TODO: project name 'swa' is hardcoded here
 messages_uri = f'http://{os.getenv("HOSTNAME_MESSAGES")}:{os.getenv("PORT_MESSAGES")}/'
 
 facade_service = FacadeService(logging_uris, messages_uri)
