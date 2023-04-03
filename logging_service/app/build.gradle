@@ -18,6 +18,9 @@ dependencies {
     implementation group: 'org.json', name: 'json', version: '20090211'
     // https://mvnrepository.com/artifact/com.networknt/json-schema-validator
     implementation 'com.networknt:json-schema-validator:1.0.77'
+
+    // https://mvnrepository.com/artifact/com.hazelcast/hazelcast
+    implementation group: 'com.hazelcast', name: 'hazelcast', version: '4.2'
 }
 
 application {
