@@ -9,7 +9,7 @@ Software Architecture labs on microservices
 
 To create and run compose project, run the following command in the project root directory and wait for servers to start (Graddle finished the last):
 ```bash
-$ PORT=8000 docker compose -p swa up
+$ PORT=8000 docker compose up
 ```
 where `8000` is the TCP port of host's `localhost` on which the app (facade service) will be available.
 
@@ -20,5 +20,5 @@ $ docker compose down --rmi all
 
 ### Notes
 
-This was testsed only on AMD64 with Ubuntu 22.04.
+This was tested only on AMD64 with Ubuntu 22.04.
 

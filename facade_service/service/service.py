@@ -4,8 +4,8 @@ from typing import List, Optional
 import asyncio
 
 class FacadeService:
-    def __init__(self, logging_uris: str, messaging_uri: str):
-        self._repository = FacadeRepository(logging_uris, messaging_uri)
+    def __init__(self, logging_uri: str, messaging_uri: str):
+        self._repository = FacadeRepository(logging_uri, messaging_uri)
 
     def log_message(self, msg_text: str) -> bool:
         message = Message.create_message_with_uuid(msg_text)

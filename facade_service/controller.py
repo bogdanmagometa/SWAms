@@ -6,33 +6,27 @@ import uvicorn
 import os
 
 app = FastAPI()
-logging_hostname = os.getenv("HOSTNAME_LOGGING")
 num_logging_services = int(os.getenv("NUM_LOGGING_SERVICES"))
-logging_port = os.getenv("PORT_LOGGING")
-logging_uris = [f'http://swa-{logging_hostname}-{i+1}:{logging_port}/' for i in range(num_logging_services)] # TODO: project name 'swa' is hardcoded here
+logging_uri = f'http://{os.getenv("HOSTNAME_LOGGING")}:{os.getenv("PORT_LOGGING")}/'
 messages_uri = f'http://{os.getenv("HOSTNAME_MESSAGES")}:{os.getenv("PORT_MESSAGES")}/'
 
-facade_service = FacadeService(logging_uris, messages_uri)
+facade_service = FacadeService(logging_uri, messages_uri)
 
 @app.get("/", response_class=PlainTextResponse)
 async def read_messages() -> List[str]:
     messages = await facade_service.read_messages()
     if messages is None:
-        return HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
     return JSONResponse([msg.message_text for msg in messages])
 
 
 @app.post("/")
 async def add_message(message_text: str) -> Any:
     if not message_text:
-        return HTTPException(status.HTTP_400_BAD_REQUEST)
+        raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
     if not facade_service.log_message(message_text):
-        return HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-    # if facade_service.log_message(message_text):
-    #     return HTTPException(status.HTTP_200_OK)
-    # return HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
+        raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 
 if __name__ == "__main__":

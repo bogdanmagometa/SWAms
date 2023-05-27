@@ -6,7 +6,7 @@ import os
 app = FastAPI()
 
 @app.get("/", response_class=PlainTextResponse)
-def get_message():
+def get_messages():
     return "Not implemented yet"
 
 if __name__ == "__main__":
