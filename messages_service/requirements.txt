@@ -1,3 +1,5 @@
 fastapi
 uvicorn[standard]
 hazelcast-python-client
+pydantic
+pydantic-factories

@@ -3,7 +3,7 @@ from typing import Any
 from uuid import UUID
 
 from pydantic import BaseModel
-from pydantic_factories import ModelFactory, Require
+from pydantic_factories import ModelFactory, Require, Use
 
 
 class Message(BaseModel):

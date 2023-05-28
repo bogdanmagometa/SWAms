@@ -12,6 +12,8 @@ public class LoggingService {
         repository.addMessage(message);
     }
     public Message[] getMessages() {
-        return repository.getMessages();
+        Message[] messages = repository.getMessages();
+        System.out.println();
+        return messages;
     }
 }

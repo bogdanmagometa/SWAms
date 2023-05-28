@@ -9,5 +9,4 @@ services:
     scale: 3
   messages:
     build: ./messages_service
-  # hazelcast:
-  #   image: hazelcast/hazelcast:5.0
+    scale: 2

@@ -1,1 +1,1 @@
-from .domain import Message
+from .message import Message, MessageFactory

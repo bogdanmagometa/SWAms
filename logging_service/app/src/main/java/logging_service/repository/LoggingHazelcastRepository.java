@@ -21,7 +21,9 @@ public class LoggingHazelcastRepository implements LoggingRepository {
 
     @Override
     public Message[] getMessages() {
-        Message[] messages = messageMap.values().stream().map(messageText -> {return new Message(null, messageText);}).toArray(Message[]::new);
+        Message[] messages = messageMap.entrySet().stream()
+                .map(entry -> {return new Message(entry.getKey(), entry.getValue());})
+                .toArray(Message[]::new);
         return messages;
     }
 }

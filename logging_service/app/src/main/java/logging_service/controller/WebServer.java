@@ -14,6 +14,7 @@ import java.util.concurrent.ThreadPoolExecutor;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
+import com.hazelcast.internal.json.JsonObject;
 import com.sun.net.httpserver.*;
 import org.json.*;
 
@@ -73,10 +74,23 @@ public class WebServer {
         
         private void handleGet(HttpExchange exchange) throws IOException {
             Message[] messages = loggingService.getMessages();
+            logInfo("Responding with " + messages.length + " messages");
             exchange.sendResponseHeaders(200, 0);
             OutputStream responseBody = exchange.getResponseBody();
-            String[] messageTextArray = Arrays.stream(messages).map(message -> {return message.getMessageText();}).toArray(String[]::new);
-            JSONArray messagesJson = new JSONArray(Arrays.asList(messageTextArray));
+            JSONObject[] messageArray = Arrays.stream(messages).map(
+                message -> {
+                    JSONObject obj;
+                    try {
+                        obj = new JSONObject()
+                            .put("message_text", message.getMessageText())
+                            .put("uuid", message.getUuid());
+                    } catch (JSONException e) {
+                        throw new RuntimeException(e);
+                    }
+                    return obj;
+                }
+                ).toArray(JSONObject[]::new);
+            JSONArray messagesJson = new JSONArray(Arrays.asList(messageArray));
             responseBody.write(messagesJson.toString().getBytes()); //TODO: look into encodings
             responseBody.flush();
             responseBody.close();
@@ -105,10 +119,11 @@ public class WebServer {
             }
             UUID uuid = UUID.fromString(jsonNode.get("uuid").asText());
 
-            String message = jsonNode.get("text").asText();
+            String messageText = jsonNode.get("text").asText();
+            Message message = new Message(uuid, messageText);
 
-            logInfo("Received message \"" + message + "\" with UUID " + uuid.toString());
-            loggingService.addMessage(new Message(uuid, message));
+            logInfo("Received message " + message);
+            loggingService.addMessage(message);
 
             exchange.sendResponseHeaders(200, -1);
         }

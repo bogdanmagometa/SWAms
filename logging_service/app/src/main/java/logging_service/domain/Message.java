@@ -19,4 +19,10 @@ public class Message {
     public UUID getUuid() {
         return uuid;
     }
+
+    @Override
+    public String toString() {
+        String format = "Message(messageText=\"%s\", uuid=\"%s\")";
+        return String.format(format, messageText, uuid.toString());
+    }
 }

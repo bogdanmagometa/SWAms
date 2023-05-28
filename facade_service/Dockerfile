@@ -1,10 +1,10 @@
 FROM python:slim
 
-ENV PRJ_DIR=/opt3/facade_service
+ENV PRJ_DIR=/opt/facade_service
 COPY . ${PRJ_DIR}
 WORKDIR ${PRJ_DIR}
 
-RUN pip install -r requirements.txt
+RUN pip3 install -r requirements.txt
 
 ENV PORT=8080
 ENV HOSTNAME_LOGGING="logging"

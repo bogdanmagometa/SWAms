@@ -4,6 +4,7 @@ import asyncio
 import random
 from typing import Optional, List
 import json
+from pydantic.tools import parse_obj_as
 
 class FacadeRepository:
     def __init__(self, logging_uri: str, messaging_uri: str):
@@ -18,13 +19,14 @@ class FacadeRepository:
     async def read_logged_messages(self) -> Optional[List[Message]]:
         response = requests.get(self._get_next_logging_uri())
         if response.status_code == 200:
-            return [Message(message_text, None) for message_text in response.json()]
+            return [parse_obj_as(Message, message) for message in response.json()]
         return None
 
     async def read_messages(self) -> Optional[str]:
         response = requests.get(self._messaging_uri)
         if response.status_code == 200:
-            return response.text
+            messages = [parse_obj_as(Message, message) for message in response.json()]
+            return messages
 
     def _get_next_logging_uri(self) -> str:
         return self._logging_uri

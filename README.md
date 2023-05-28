@@ -3,11 +3,11 @@ Software Architecture labs on microservices
 
 ### Prerequisites
 
-- You need to have **Docker Engine** and **Docker Compose** on your machine
+- You need to have **Docker Engine** and **Docker Compose** installed on your machine
 
 ### Usage
 
-To create and run compose project, run the following command in the project root directory and wait for servers to start (Graddle finished the last):
+To create and run compose project, run the following command in the project root directory and wait for servers to start (Gradle finishes the last):
 ```bash
 $ PORT=8000 docker compose up
 ```
@@ -17,6 +17,10 @@ To remove the created compose project, run:
 ```bash
 $ docker compose down --rmi all
 ```
+
+### Example
+
+<img src="./img/img.png" />
 
 ### Notes
 

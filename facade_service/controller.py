@@ -11,6 +11,8 @@ num_logging_services = int(os.getenv("NUM_LOGGING_SERVICES"))
 logging_uri = f'http://{os.getenv("HOSTNAME_LOGGING")}:{os.getenv("PORT_LOGGING")}/'
 messages_uri = f'http://{os.getenv("HOSTNAME_MESSAGES")}:{os.getenv("PORT_MESSAGES")}/'
 
+print("messages_uri:", messages_uri)
+
 facade_service = FacadeService(logging_uri, messages_uri)
 
 @app.get("/", response_class=PlainTextResponse)
