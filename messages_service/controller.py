@@ -22,9 +22,9 @@ async def get_messages() -> List[Message]:
 
 def poll_messages_queue():
     hazelcast_client = HazelcastClient(cluster_members=[HAZELCAST_NODE], connection_timeout=30.0)
-    messages_queue = hazelcast_client.get_queue(QUEUE_NAME)
+    messages_queue = hazelcast_client.get_queue(QUEUE_NAME).blocking()
     while True:
-        message = messages_queue.take().result()
+        message = messages_queue.take()
         app.messages_service.add_message(message)
 
 @app.on_event("startup")

@@ -23,8 +23,8 @@ class FacadeService:
         print("Received message " + message.json())
         queue_fut = self._messages_queue.put(message)
         repository_fut = self._repository.log_message(message)
-        _, status = await asyncio.gather(queue_fut, repository_fut)
-        return status
+        queue_fut.result()
+        return await repository_fut
 
     async def read_messages(self) -> Optional[List[Message]]:
         cor1 = self._repository.read_logged_messages()
