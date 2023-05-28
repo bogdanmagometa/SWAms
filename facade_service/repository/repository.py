@@ -10,7 +10,7 @@ class FacadeRepository:
         self._logging_uri = logging_uri
         self._messaging_uri = messaging_uri
 
-    def log_message(self, message: Message) -> bool:
+    async def log_message(self, message: Message) -> bool:
         message_json = json.dumps({"uuid": str(message.uuid), "text": message.message_text})
         response = requests.post(self._get_next_logging_uri(), data=message_json)
         return response.status_code == 200
@@ -21,7 +21,7 @@ class FacadeRepository:
             return [Message(message_text, None) for message_text in response.json()]
         return None
 
-    async def read_message(self) -> Optional[str]:
+    async def read_messages(self) -> Optional[str]:
         response = requests.get(self._messaging_uri)
         if response.status_code == 200:
             return response.text

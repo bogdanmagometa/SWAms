@@ -1,3 +1,4 @@
+print("Hello to Docker")
 from fastapi import FastAPI, HTTPException, status
 from fastapi.responses import PlainTextResponse, JSONResponse
 from service.service import FacadeService
@@ -25,7 +26,7 @@ async def add_message(message_text: str) -> Any:
     if not message_text:
         raise HTTPException(status.HTTP_400_BAD_REQUEST)
 
-    if not facade_service.log_message(message_text):
+    if not await facade_service.add_message(message_text):
         raise HTTPException(status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 

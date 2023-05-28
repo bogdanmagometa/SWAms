@@ -8,4 +8,4 @@ RUN pip install -r requirements.txt
 
 ENV PORT=8082
 
-CMD uvicorn messages:app --host 0.0.0.0 --port ${PORT}
+CMD uvicorn controller:app --host 0.0.0.0 --port ${PORT}

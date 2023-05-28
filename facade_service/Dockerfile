@@ -1,6 +1,6 @@
-FROM python:3.9
+FROM python:slim
 
-ENV PRJ_DIR=/opt/facade_service
+ENV PRJ_DIR=/opt3/facade_service
 COPY . ${PRJ_DIR}
 WORKDIR ${PRJ_DIR}
 
