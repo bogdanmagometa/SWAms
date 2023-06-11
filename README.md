@@ -20,6 +20,8 @@ $ docker compose down --rmi all
 
 ### Example
 
+The results are the same as in the previous lab, because the logic didn't change.
+
 <img src="./img/img.png" />
 
 ### Notes
