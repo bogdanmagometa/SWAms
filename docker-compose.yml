@@ -2,11 +2,32 @@ version: "3.9"
 services:
   facade:
     build: ./facade_service
+    depends_on:
+      - consul
     ports:
       - "${PORT}:8080"
   logging:
     build: ./logging_service
+    depends_on:
+      - consul
     scale: 3
   messages:
     build: ./messages_service
+    depends_on:
+      - consul
     scale: 2
+
+  consul:
+    build:
+      context: ./consul
+      dockerfile: ./Dockerfile
+    environment:
+      CONSUL_HTTP_ADDR: "consul:8500"
+    volumes:
+      - consul-volume:/consul/data
+    ports:
+      - "8500:8500"
+    command: "agent -server --bootstrap -data-dir=/consul/data"
+
+volumes:
+  consul-volume:

@@ -5,6 +5,8 @@ import asyncio
 from fastapi import FastAPI
 import uvicorn
 from hazelcast import HazelcastClient
+import consul
+import socket
 
 from service import MessagesService
 from domain import Message
@@ -12,8 +14,28 @@ from domain import Message
 
 app = FastAPI()
 app.messages_service = MessagesService()
-QUEUE_NAME = "messages_queue"
-HAZELCAST_NODE = "logging"
+
+port = os.getenv("PORT")
+
+def register_with_consul(service_name, port):
+    consul_client = consul.Consul("consul")
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    consul_client.agent.service.register(
+        name=service_name,
+        service_id=f'{service_name}-{hostname}',
+        address=ip_address,
+        port=port,
+    )
+
+def get_configuration():
+    consul_client = consul.Consul("consul")
+    _, data1 =  consul_client.kv.get("queue_name")
+    _, data2 =  consul_client.kv.get("hazelcast_node")
+    return data1['Value'].decode(), data2['Value'].decode()
+
+register_with_consul("messages", int(port))
+QUEUE_NAME, HAZELCAST_NODE = get_configuration()
 
 @app.get("/")
 async def get_messages() -> List[Message]:

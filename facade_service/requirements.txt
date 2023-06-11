@@ -4,3 +4,4 @@ requests
 hazelcast-python-client
 pydantic
 pydantic-factories
+python-consul
